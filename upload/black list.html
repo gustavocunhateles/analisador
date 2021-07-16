@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>Black List</title>
+        <meta charset="utf-8" />
+
+        <link href="bl.css" rel="stylesheet" media="all" />
+        <script src="bl.js"></script>
+
+    </head>
+
+    <body>
+        <form name="ip">
+
+        <h1>Black List</h1>
+
+        <label for="ip">IP:</label>
+        <input 
+            type="text" class="ip" id="ip" name="ip" required="required"  maxlength="15"
+            placeholder="192.168.1.1" onkeypress="mascara( this, event )" onkeyup="somenteNumeros(this);" 
+        />
+
+        <br><br>
+        
+        <label for="quarentena">Quarentena:</label>
+        <select class="quarentena" id="quarentena" name="quarentena" required="required" >
+            <option value=""></option>
+            <option value="2">2 horas</option>
+            <option value="12">12 horas</option>
+            <option value="24">24 horas</option>
+            <option value="48">48 horas</option>
+        </select>
+
+        <br><br>
+
+        <input type="submit" class="enviar" onclick="enviar();" value="Enviar" />
+
+        </form>
+    </body>
+</html>
+
+<script>
+function enviar() {
+
+var ip = document.getElementById("ip");
+var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+var quarentena = document.getElementById("quarentena");
+
+if(ip.value == "" && quarentena.value == ""){
+    alert('Digite algum IP e escolha o período de quarentena do IP!');
+} 
+
+else if(ip.value == ""){
+    alert('Digite algum IP!');
+}
+
+else if(quarentena.value == ""){
+    alert('Escolha o período de quarentena do IP!');
+} 
+
+else if (ip.value != "" && quarentena.value != ""){
+
+    if (ip.value.match(ipformat)) {  
+        alert('O IP ' + ip.value + ' constará na Black List por ' + quarentena.value + ' horas.');
+        alert('INSERT INTO black_list.ips (ip, periodoQuarentena, dataQuarentena) VALUES ('+ip.value+', '+quarentena.value+', CURDATE());');             
+    }  
+
+    else{
+        alert("IP inválido!");  
+    }
+
+}
+
+}
+
+function somenteNumeros(num) {
+var er = /[^0-9.]/;
+er.lastIndex = 0;
+var campo = num;
+if (er.test(campo.value)) {
+  campo.value = "";
+}
+}
+
+
+function mascara( campo, e )
+{
+var kC = (document.all) ? event.keyCode : e.keyCode;
+var data = campo.value;
+
+if( kC!=15 )
+{
+    if( data.length==3 )
+    {
+        campo.value = data += '.';
+    }
+    else if( data.length==7 )
+    {
+        campo.value = data += '.';
+    }
+    else if( data.length==11 )
+    {
+        campo.value = data += '.';
+    }
+    else
+        campo.value = data;
+}
+}
+</script>
+
+<style>
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+form {
+    font-family: Verdana,Tahoma,sans-serif;
+    font-size: 15px;
+    background-color: whitesmoke;
+    max-width: 500px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    margin-left: 20px;
+    color: black;
+    text-shadow: 5px 5px 5px black;
+}
+
+input, textarea {
+    width: 200px;
+    padding: 10px;
+    color: black;
+    margin-left: 20px;
+    margin-top: 10px;
+    border: 1px solid;
+}
+
+input:hover, textarea:hover, input:focus, textarea:focus {
+    border-color: #000066;
+    box-shadow: 5px 0px 9px whitesmoke;
+    background-color: whitesmoke;
+    color: black;
+    font-weight: bold;
+}
+
+.enviar {
+    background-color: white;
+    height: 40px;
+    width: 100px;
+    font-weight: bold;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border: 1px solid;
+    color: black;
+}
+
+textarea {
+    width: 400px;
+    height: 120px;
+    line-height: 20px;
+    max-width: 400px;
+}
+
+form label {
+    margin-left: 20px;
+    color: black;
+    font-weight: bold;
+}
+
+</style>
